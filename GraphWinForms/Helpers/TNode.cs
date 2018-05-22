@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GraphWinForms.Helpers
 {
-    public class TNode
+
+    public partial class TNode
     {
         public string Label
         {
@@ -15,7 +16,7 @@ namespace GraphWinForms.Helpers
                 return label.ToString();
             }
         }
-        public int? label;
+        public int label { get; set; }
         public List<TNode> Children { get; set; }
         public TNode Parent { get; set; }
         public TNode(int label)
@@ -68,6 +69,20 @@ namespace GraphWinForms.Helpers
         {
 
             Children.RemoveAll(x => x.label == node.label);
+        }
+
+        public void RemoveChildInRoot(TNode node)
+        {
+            foreach(TNode child in Children)
+            {
+                if(child == node)
+                {
+                    RemoveChild(node);
+                    return;
+                }
+                child.RemoveChildInRoot(node);
+            }
+            
         }
 
         public static int CountVertices(TNode node)
@@ -141,7 +156,5 @@ namespace GraphWinForms.Helpers
         {
             return label.GetHashCode();
         }
-
-
     }
 }
